@@ -1,19 +1,19 @@
-export class Domain<V> {
-    private checker: (v: V) => boolean;
+export class Domain<T> {
+    private is_in: (x: T) => boolean;
 
-    Domain(valid_values: Array<V> | ((v: V) => boolean)) {
-        if (valid_values instanceof Array<V>) {
-            this.checker = (v: V) => {
-                return valid_values.includes(v);
+    Domain(valid_values: Array<T> | ((x: T) => boolean)) {
+        if (valid_values instanceof Array<T>) {
+            this.is_in = (x: T) => {
+                return valid_values.includes(x);
             };
         }
         else {
-            this.checker = valid_values;
+            this.is_in = valid_values;
         }
     }
 
-    // checks if the value v is in the domain
-    check(v: V): boolean {
-        return this.checker(v);
+    // checks if the value x is in the domain
+    check(x: T): boolean {
+        return this.is_in(x);
     }
 }
