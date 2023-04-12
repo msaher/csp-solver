@@ -5,7 +5,7 @@ export interface Checker {
 export class Domain<T> implements Checker {
     private _is_in: (x: T) => boolean;
 
-    Domain(valid_values: Array<T> | ((x: T) => boolean)) {
+    constructor(valid_values: Array<T> | ((x: T) => boolean)) {
         if (valid_values instanceof Array<T>) {
             this._is_in = (x: T) => {
                 return valid_values.includes(x);
