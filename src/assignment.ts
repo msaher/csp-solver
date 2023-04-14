@@ -1,7 +1,9 @@
-import {Domain, Checker} from './domain';
+import {Domain, IDomain} from './domain';
+import {Var} from './Var';
 
+// TODO: THIS IS WRONG WE HAVE n Ks and n Vs
 export class Assignment<K, V> {
-    domains: Map<K, Checker>;
+    domains: Map<K, IDomain>;
     map: Map<K, V>;
 
     constructor(domains: Map<K, Domain<V>>) {

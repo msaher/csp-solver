@@ -1,8 +1,8 @@
-export interface Checker {
+export interface IDomain {
     is_in(v: any): boolean;
 }
 
-export class Domain<T> implements Checker {
+export class Domain<T> implements IDomain {
     private _is_in: (x: T) => boolean;
 
     constructor(valid_values: Array<T> | ((x: T) => boolean)) {
