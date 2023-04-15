@@ -1,7 +1,10 @@
 import {MapAssign} from './assignment'
 
-export type Color = "R" | "G" | "B";
-export type Region = "WA" | "NT" | "SA" | "Q" | "NSW" | "V" | "T";
+const colors = ["R", "G", "B"] as const;
+export type Color = typeof colors[number];
+
+const regions = ["WA", "NT", "SA", "Q", "NSW", "V", "T"] as const;
+export type Region = typeof regions[number];
 
 export class AusterliaAssign extends MapAssign<[Region, Color]> {}
 
