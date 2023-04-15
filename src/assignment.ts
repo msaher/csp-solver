@@ -5,6 +5,7 @@ type Value<T extends [any, any]> = T extends [a: any, b: infer B] ? B : never;
 export interface Assignment<T extends [key: any, value: any]> {
     get(key: Key<T>): Value<T> | undefined;
     set(key: Key<T>, value: Value<T>): void;
+    entries(): IterableIterator<[Key<T>, Value<T>]>;
 }
 
 export class MapAssign<T extends [key: any, value: any]> implements Assignment<T> {
@@ -20,6 +21,10 @@ export class MapAssign<T extends [key: any, value: any]> implements Assignment<T
 
     set(key: Key<T>, value: Value<T>): void {
         this.map.set(key, value);
+    }
+
+    entries(): IterableIterator<[Key<T>, Value<T>]> {
+        return this.map.entries();
     }
 
 }
