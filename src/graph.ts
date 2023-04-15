@@ -43,4 +43,16 @@ export class Graph<N, W> {
     adjacency(node1: N): Edge<N, W>[] | undefined {
         return this.map.get(node1);
     }
+
+    getEdge(node1: N, node2: N): Edge<N, W> | undefined {
+        let adj = this.map.get(node1);
+        if (adj === undefined)
+            return undefined;
+
+        for (let edge of adj)
+            if (node2 === edge.node1 || node2 === edge.node2)
+                return edge;
+
+        return undefined;
+    }
 }
