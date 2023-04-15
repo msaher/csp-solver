@@ -7,18 +7,18 @@ export interface Assignment<T extends [key: any, value: any]> {
     set(key: Key<T>, value: Value<T>): void;
 }
 
-export class HomoAssign<K, V> implements Assignment {
-    map: Map<K, V>;
+export class MapAssign<T extends [key: any, value: any]> implements Assignment<T> {
+    map: Map<Key<T>, Value<T>>;
 
-    constructor(map: Map<K, V>) {
+    constructor(map: Map<Key<T>, Value<T>>) {
         this.map = map;
     }
 
-    get(key: K): V | undefined {
+    get(key: Key<T>): Value<T> | undefined {
         return this.map.get(key);
     }
 
-    set(key: K, value: V): void {
+    set(key: Key<T>, value: Value<T>): void {
         this.map.set(key, value);
     }
 
