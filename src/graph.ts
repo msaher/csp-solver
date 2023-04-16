@@ -9,8 +9,11 @@ export type Edge<N1, W, N2 = N1> = {
 export class Graph<N, W> {
     map: Map<N, Edge<N, W>[]>;
 
-    constructor(map: Map<N, Edge<N, W>[]>) {
-        this.map = map;
+    constructor(map?: Map<N, Edge<N, W>[]>) {
+        if (map === undefined)
+            this.map = new Map();
+        else
+            this.map = map;
     }
 
     addEdge(node1: N, node2: N, weight: W): Graph<N, W> {
