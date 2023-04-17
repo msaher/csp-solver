@@ -9,7 +9,7 @@ export interface Assignment<T extends [key: any, value: any]> {
     entries(): IterableIterator<[Key<T>, Value<T>]>;
 }
 
-export class MapAssign<T extends [key: any, value: any]> implements Assignment<T> {
+export class HashAssign<T extends [key: any, value: any]> implements Assignment<T> {
     map: Map<string, T>;
 
     constructor() {
