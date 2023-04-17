@@ -34,6 +34,13 @@ describe('graph module', () => {
         expect(adja).toEqual(adjb);
     })
 
+    test('edges are directional', () => {
+        graph.addEdge('A', 'B', 99, true);
+        let adja = graph.adjacency('A');
+        let adjb = graph.adjacency('B');
+        expect(adja).not.toEqual(adjb);
+    })
+
     test('allowing duplicate edges', () => {
         graph.addEdge('A', 'B', 10);
         graph.addEdge('A', 'B', 10);
