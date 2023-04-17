@@ -1,11 +1,11 @@
 import {Assignment} from './assignment';
 import {Graph} from './graph';
 
-type Checker<K, V> = (k1: K, v1: V, k2: K, v2: V) => boolean;
+type Checker<V> = (v1: V, v2: V) => boolean;
 
-function runChecks<K, V>(k1: K, v1: V, k2: K, v2: V, checkers: Checker<K, V>[]): boolean {
+function runChecks<V>(v1: V, v2: V, checkers: Checker<V>[]): boolean {
     for (let c of checkers)
-        if (!c(k1, v1, k2, v2))
+        if (!c(v1, v2))
             return false;
     return true;
 }
@@ -18,10 +18,10 @@ function wrap<T>(data: T | T[]): T[] {
 }
 
 export class Constraints<K, V> {
-    graph: Graph<K, Checker<K, V>[]>;
+    graph: Graph<K, Checker<V>[]>;
 
-    constructor(graph: Graph<K, Checker<K, V>[]>) {
-        this.graph = graph;
+    constructor() {
+        this.graph = new Graph();
     }
 
     isConsistent(k1: K, v1: V, k2: K, v2: V): boolean {
@@ -29,8 +29,8 @@ export class Constraints<K, V> {
         if (edge === undefined) // no constraints between k1 and k2
             return true;
 
-        let checkers = edge.weight;
-        return runChecks(k1, v1, k2, v2, checkers);
+        let checks = edge.weight;
+        return runChecks(v1, v2, checks);
     }
 
     checkAssignment(assignment: Assignment<[K, V]>): boolean {
@@ -41,14 +41,16 @@ export class Constraints<K, V> {
             for (let edge of adj) {
                 let k2 = (edge.node1 === k1) ? edge.node2 : edge.node1;
                 let v2 = assignment.get(k2);
-                if (v2 !== undefined && !runChecks(k1, v1, k2, v2, edge.weight))
+                if (v2 !== undefined && !runChecks(v1, v2, edge.weight)) {
+                    console.log(`failed: ${k1} and ${k2}`)
                     return false;
+                }
             }
         }
         return true;
     }
 
-    addConstraint(k1: K, k2: K, checks: Checker<K, V> | Checker<K, V>[]): Constraints<K , V> {
+    addConstraint(k1: K, k2: K, checks: Checker<V> | Checker<V>[]): Constraints<K, V> {
         checks = wrap(checks);
         let edge = this.graph.getEdge(k1, k2);
         if (edge === undefined)
