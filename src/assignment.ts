@@ -6,6 +6,8 @@ export interface Assignment<T extends [key: any, value: any]> {
     get(key: Key<T>): Value<T> | undefined;
     set(pair: T): void;
     entries(): IterableIterator<[Key<T>, Value<T>]>;
+    delete(key: Key<T>): boolean;
+    size(): number;
 }
 
 export class HashAssign<T extends [key: any, value: any]> implements Assignment<T> {
@@ -25,5 +27,13 @@ export class HashAssign<T extends [key: any, value: any]> implements Assignment<
 
     entries(): IterableIterator<[Key<T>, Value<T>]> {
         return this.hmap.entries();
+    }
+
+    delete(key: Key<T>): boolean {
+        return this.hmap.delete(key);
+    }
+
+    size(): number {
+        return this.hmap.size();
     }
 }

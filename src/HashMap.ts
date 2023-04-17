@@ -1,6 +1,6 @@
 import {hash} from './hash';
 
-export class HashMap<K extends Object, V> {
+export class HashMap<K, V> {
     map: Map<string, [K, V]>
 
     constructor() {
@@ -23,8 +23,17 @@ export class HashMap<K extends Object, V> {
         return this;
     }
 
+    delete(key: K): boolean {
+        let h = hash(key);
+        return this.map.delete(h);
+    }
+
     *entries(): IterableIterator<[K, V]> {
         for (const [_, pair] of this.map.entries())
             yield pair;
+    }
+
+    size(): number {
+        return this.map.size;
     }
 }
