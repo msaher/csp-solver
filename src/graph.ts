@@ -1,3 +1,4 @@
+import {HashMap} from './HashMap';
 // undirected edge
 export type Edge<N1, W, N2 = N1> = {
     node1: N1,
@@ -7,48 +8,53 @@ export type Edge<N1, W, N2 = N1> = {
 
 // undirected graph
 export class Graph<N, W> {
-    map: Map<N, Edge<N, W>[]>;
+    hmap: HashMap<N, Edge<N, W>[]>;
 
-    constructor(map?: Map<N, Edge<N, W>[]>) {
-        if (map === undefined)
-            this.map = new Map();
+    constructor(hmap?: HashMap<N, Edge<N, W>[]>) {
+        if (hmap === undefined)
+            this.hmap = new HashMap();
         else
-            this.map = map;
+            this.hmap = hmap;
     }
 
-    addEdge(node1: N, node2: N, weight: W): Graph<N, W> {
-        let adj1 = this.map.get(node1);
+    addEdge(node1: N, node2: N, weight: W, directed?: boolean): Graph<N, W> {
+        let edge = {node1, node2, weight};
+        if (directed)
+            return this.addDiEdge(node1, edge);
+        return this.addBiEdge(node1, node2, edge);
+    }
+
+    addDiEdge(node1: N, edge: Edge<N, W>): Graph<N, W> {
+        let adj1 = this.hmap.get(node1);
         if (adj1 === undefined)
             adj1 = this.addNode(node1);
 
-        let adj2 = this.map.get(node2);
-        if (adj2 === undefined)
-            adj2 = this.addNode(node2);
-
-        let edge = { node1, node2, weight, }
-
         adj1.push(edge);
-        adj2.push(edge);
+        return this;
+    }
 
+    addBiEdge(node1: N, node2: N, edge: Edge<N, W>): Graph<N, W> {
+        this.addDiEdge(node1, edge);
+        this.addDiEdge(node2, edge);
         return this;
     }
 
     addNode(node: N): Edge<N, W>[] {
-        let edges = this.map.get(node);
+        let edges = this.hmap.get(node);
         if (edges !== undefined)
             return edges;
         edges = [];
-        this.map.set(node, edges);
+        this.hmap.set(node, edges);
 
         return edges;
     }
 
     adjacency(node1: N): Edge<N, W>[] | undefined {
-        return this.map.get(node1);
+        return this.hmap.get(node1);
     }
 
     getEdge(node1: N, node2: N): Edge<N, W> | undefined {
-        let adj = this.map.get(node1);
+        let adj = this.hmap.get(node1);
         if (adj === undefined)
             return undefined;
 
