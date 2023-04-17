@@ -11,16 +11,16 @@ describe('Graph coloring constraints', () => {
 
     beforeEach(() => {
         cons = new Constraints();
-        cons.addConstraint('SA', 'WA', diff);
-        cons.addConstraint('SA', 'NT', diff);
-        cons.addConstraint('SA', 'Q', diff);
-        cons.addConstraint('SA', 'NSW', diff);
-        cons.addConstraint('SA', 'V', diff);
+        cons.add('SA', 'WA', diff);
+        cons.add('SA', 'NT', diff);
+        cons.add('SA', 'Q', diff);
+        cons.add('SA', 'NSW', diff);
+        cons.add('SA', 'V', diff);
 
-        cons.addConstraint('WA', 'NT', diff);
-        cons.addConstraint('NT', 'Q', diff);
-        cons.addConstraint('Q', 'NSW', diff);
-        cons.addConstraint('NSW', 'V', diff);
+        cons.add('WA', 'NT', diff);
+        cons.add('NT', 'Q', diff);
+        cons.add('Q', 'NSW', diff);
+        cons.add('NSW', 'V', diff);
 
         assignment = new AusterliaAssign();
     });
@@ -35,14 +35,14 @@ describe('Graph coloring constraints', () => {
     });
 
     test('Check partial assignment', () => {
-        expect(cons.check_partial(assignment)).toBe(true);
+        expect(cons.checkPartial(assignment)).toBe(true);
 
         assignment.set(['T', 'R']);
-        expect(cons.check_partial(assignment)).toBe(true);
+        expect(cons.checkPartial(assignment)).toBe(true);
 
         assignment.set(['SA', 'R']);
         assignment.set(['NT', 'R']);
-        expect(cons.check_partial(assignment)).toBe(false);
+        expect(cons.checkPartial(assignment)).toBe(false);
 
     });
 
@@ -56,6 +56,6 @@ describe('Graph coloring constraints', () => {
 
         assignment.set(['T', 'R']);
 
-        expect(cons.check_partial(assignment)).toBe(true);
+        expect(cons.checkPartial(assignment)).toBe(true);
     })
 });
