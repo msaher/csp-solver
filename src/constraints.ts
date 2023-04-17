@@ -33,7 +33,7 @@ export class Constraints<K, V> {
         return runChecks(v1, v2, checks);
     }
 
-    checkAssignment(assignment: Assignment<[K, V]>): boolean {
+    check_partial(assignment: Assignment<[K, V]>): boolean {
         for (const [k1, v1] of assignment.entries()) {
             let adj = this.graph.adjacency(k1);
             if (adj === undefined) // k1 is isolated

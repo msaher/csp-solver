@@ -35,14 +35,14 @@ describe('Graph coloring constraints', () => {
     });
 
     test('Check partial assignment', () => {
-        expect(cons.checkAssignment(assignment)).toBe(true);
+        expect(cons.check_partial(assignment)).toBe(true);
 
         assignment.set(['T', 'R']);
-        expect(cons.checkAssignment(assignment)).toBe(true);
+        expect(cons.check_partial(assignment)).toBe(true);
 
         assignment.set(['SA', 'R']);
         assignment.set(['NT', 'R']);
-        expect(cons.checkAssignment(assignment)).toBe(false);
+        expect(cons.check_partial(assignment)).toBe(false);
 
     });
 
@@ -56,6 +56,6 @@ describe('Graph coloring constraints', () => {
 
         assignment.set(['T', 'R']);
 
-        expect(cons.checkAssignment(assignment)).toBe(true);
+        expect(cons.check_partial(assignment)).toBe(true);
     })
 });
