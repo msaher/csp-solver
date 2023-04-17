@@ -1,6 +1,5 @@
 import {HashMap} from './HashMap';
-type Key<T extends [any, any]> = T extends [a: infer A, b: any] ? A : never;
-type Value<T extends [any, any]> = T extends [a: any, b: infer B] ? B : never;
+import {Key, Value} from './utils'
 
 // I don't wanna force users to use a (single) hash map so this will be an interface
 export interface Assignment<T extends [key: any, value: any]> {

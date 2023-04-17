@@ -1,5 +1,7 @@
 import {Assignment} from './assignment';
 import {Graph} from './graph';
+import {wrap} from './utils'
+import {isEqual} from 'lodash';
 
 type Checker<V> = (v1: V, v2: V) => boolean;
 
@@ -8,13 +10,6 @@ function runChecks<V>(v1: V, v2: V, checkers: Checker<V>[]): boolean {
         if (!c(v1, v2))
             return false;
     return true;
-}
-
-function wrap<T>(data: T | T[]): T[] {
-    if (data instanceof Array)
-        return data;
-    else
-        return [data];
 }
 
 export class Constraints<K, V> {
@@ -33,32 +28,38 @@ export class Constraints<K, V> {
         return runChecks(v1, v2, checks);
     }
 
-    check_partial(assignment: Assignment<[K, V]>): boolean {
+    checkPartial(assignment: Assignment<[K, V]>): boolean {
         for (const [k1, v1] of assignment.entries()) {
             let adj = this.graph.adjacency(k1);
             if (adj === undefined) // k1 is isolated
                 continue;
             for (let edge of adj) {
-                let k2 = (edge.node1 === k1) ? edge.node2 : edge.node1;
+                let k2 = (isEqual(edge.node1, k1)) ? edge.node2 : edge.node1;
                 let v2 = assignment.get(k2);
-                if (v2 !== undefined && !runChecks(v1, v2, edge.weight)) {
-                    console.log(`failed: ${k1} and ${k2}`)
+                if (v2 !== undefined && !runChecks(v1, v2, edge.weight))
                     return false;
-                }
             }
         }
         return true;
     }
 
-    addConstraint(k1: K, k2: K, checks: Checker<V> | Checker<V>[]): Constraints<K, V> {
+    add(k1: K, k2: K, checks: Checker<V> | Checker<V>[], directed?: boolean): Constraints<K, V> {
         checks = wrap(checks);
         let edge = this.graph.getEdge(k1, k2);
         if (edge === undefined)
-            this.graph.addEdge(k1, k2, checks);
+            this.graph.addEdge(k1, k2, checks, directed);
         else
             for (let c of checks)
                 edge.weight.push(c);
 
         return this;
+    }
+
+    get(k1: K, k2: K): Checker<V>[] | undefined {
+        let edge = this.graph.getEdge(k1, k2);
+        if (edge !== undefined)
+            [...edge.weight];
+        else
+            return undefined;
     }
 }
