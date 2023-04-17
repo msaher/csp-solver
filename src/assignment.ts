@@ -1,4 +1,4 @@
-import {hash} from './hash'
+import {HashMap} from './HashMap';
 type Key<T extends [any, any]> = T extends [a: infer A, b: any] ? A : never;
 type Value<T extends [any, any]> = T extends [a: any, b: infer B] ? B : never;
 
@@ -10,28 +10,21 @@ export interface Assignment<T extends [key: any, value: any]> {
 }
 
 export class HashAssign<T extends [key: any, value: any]> implements Assignment<T> {
-    map: Map<string, T>;
+    hmap: HashMap<Key<T>, Value<T>>;
 
     constructor() {
-        this.map = new Map();
+        this.hmap = new HashMap();
     }
 
     get(key: Key<T>): Value<T> | undefined {
-        let h = hash(key);
-        let pair = this.map.get(h);
-        if (pair !== undefined)
-            return pair[1];
-        else
-            return undefined;
+        return this.hmap.get(key);
     }
 
     set(pair: T): void {
-        let h = hash(pair[0]);
-        this.map.set(h, pair);
+        this.hmap.set(pair[0], pair[1]);
     }
 
-    *entries(): IterableIterator<[Key<T>, Value<T>]> {
-        for (const [_, pair] of this.map.entries())
-            yield pair;
+    entries(): IterableIterator<[Key<T>, Value<T>]> {
+        return this.hmap.entries();
     }
 }
