@@ -3,11 +3,13 @@ import {Constraints} from './constraints';
 import {Key, Value} from './utils';
 import {HashMap} from './HashMap';
 
+export class Domains<T extends [any, any]> extends HashMap<Key<T>, Value<T>[]> {};
+
 export class Csp<T extends [any, any]> {
-    domains: HashMap<Key<T>, Value<T>[]>;
+    domains: Domains<T>;
     constraints: Constraints<Key<T>, Value<T>>;
 
-    constructor(domains: HashMap<Key<T>, Value<T>[]>, constraints: Constraints<Key<T>, Value<T>>) {
+    constructor(domains: Domains<T>, constraints: Constraints<Key<T>, Value<T>>) {
         this.domains = domains;
         this.constraints = constraints;
     }
