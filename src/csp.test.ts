@@ -1,9 +1,6 @@
-import {beforeEach, describe, expect, test} from '@jest/globals';
-import {Csp} from './csp';
-import {Constraints} from './Constraints';
-import {Assignment} from './Assignment';
+import {describe, expect, test} from '@jest/globals';
+import {backtracking, Constraints, Assignment, Csp} from './csp';
 import {HashMap} from './HashMap';
-import {backtracking} from './backtracking';
 
 describe('Csp class', () => {
 

@@ -2,6 +2,7 @@ import {Assignment} from './Assignment';
 import {Constraints} from './Constraints';
 import {Key, Value} from './utils';
 import {HashMap} from './HashMap';
+import {backtracking} from './backtracking';
 
 export class Domains<T extends [any, any]> extends HashMap<Key<T>, Value<T>[]> {};
 
@@ -34,3 +35,5 @@ export class Csp<T extends [any, any]> {
         return this.domains.entries();
     }
 }
+
+export {Constraints, Assignment, backtracking};
