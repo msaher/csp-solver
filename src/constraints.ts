@@ -62,4 +62,12 @@ export class Constraints<K, V> {
         else
             return undefined;
     }
+
+    adjacency(k1: K): K[] | undefined {
+        let edges = this.graph.adjacency(k1);
+        if (edges === undefined)
+            return undefined
+
+        return edges.map((e) => isEqual(e.node1, k1) ? e.node2 : e.node1);
+    }
 }
