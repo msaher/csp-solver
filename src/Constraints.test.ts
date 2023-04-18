@@ -1,6 +1,12 @@
 import {beforeEach, describe, expect, test} from '@jest/globals';
 import {Constraints} from './Constraints';
-import {colors, regions, AusterliaAssign, Color, Region} from './graph_coloring'
+import {Assignment} from './Assignment';
+
+const colors = ["R", "G", "B"] as const;
+type Color = typeof colors[number];
+const regions = ["WA", "NT", "SA", "Q", "NSW", "V", "T"] as const;
+type Region = typeof regions[number];
+export class AusterliaAssign extends Assignment<[Region, Color]> {}
 
 describe('Graph coloring constraints', () => {
     let assignment: AusterliaAssign;
