@@ -1,8 +1,8 @@
 import {Queue} from 'queue-typescript';
 import {Csp, Domains} from './csp';
 import {Key, Value} from './utils';
-import {Assignment, HashAssign} from './assignment';
-import {cloneDeep, constant} from 'lodash';
+import {Assignment} from './assignment';
+import {cloneDeep} from 'lodash';
 
 function extractArcs<T extends [any, any]>(csp: Csp<T>): Queue<[Key<T>, Key<T>]> {
     let q: Queue<[Key<T>, Key<T>]> = new Queue();
@@ -123,7 +123,6 @@ function backtracking_helper<T extends [any, any]>(csp: Csp<T>, assignment: Assi
 }
 
 export function backtracking<T extends [any, any]>(csp: Csp<T>, assignment: Assignment<T>): boolean {
-    let queue = new Queue<[Key<T>, Key<T>]>();
     let queue = extractArcs(csp);
     let doms = cloneDeep(csp.domains);
     let ok = ac3(csp, queue, doms, assignment);
