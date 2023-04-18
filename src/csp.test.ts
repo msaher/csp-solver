@@ -98,9 +98,9 @@ describe('Csp class', () => {
         expect(csp.checkPartial(assignment)).toBe(true);
 
         let assign = new HashAssign<[Region, Color]>();
-        let sol = backtracking(csp, assign) as Assignment<[Region, Color]>;
-        expect(csp.isComplete(sol)).toEqual(true);
-        expect(csp.checkPartial(sol)).toEqual(true);
+        backtracking(csp, assign);
+        expect(csp.isComplete(assign)).toEqual(true);
+        expect(csp.checkPartial(assign)).toEqual(true);
 
     })
 })

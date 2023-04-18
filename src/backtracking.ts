@@ -88,16 +88,16 @@ function mrv<T extends [any, any]>(csp: Csp<T>, domains: Domains<T>, assignment:
     return v;
 }
 
-function backtracking_helper<T extends [any, any]>(csp: Csp<T>, assignment: Assignment<T>, domains: Domains<T>): Assignment<T> | undefined {
+function backtracking_helper<T extends [any, any]>(csp: Csp<T>, assignment: Assignment<T>, domains: Domains<T>): boolean {
     if (csp.isComplete(assignment)) {
-        return assignment;
+        return true;
     }
 
     let cpdom: Domains<T> = cloneDeep(domains);
     let key = mrv(csp, domains, assignment);
     let d = domains.get(key);
     if (d === undefined) {
-        return undefined
+        return false
     }
 
     for (const val of d) {
@@ -112,22 +112,22 @@ function backtracking_helper<T extends [any, any]>(csp: Csp<T>, assignment: Assi
         let ok = ac3(csp, queue, cpdom, assignment);
         if (ok) {
             let result = backtracking_helper(csp, assignment, cpdom);
-            if (result !== undefined) {
+            if (result) {
                 return result;
             }
         }
         assignment.delete(key);
         cpdom = cloneDeep(domains);
     }
-    return undefined;
+    return false;
 }
 
-export function backtracking<T extends [any, any]>(csp: Csp<T>, assignment: Assignment<T>): Assignment<T> | undefined {
+export function backtracking<T extends [any, any]>(csp: Csp<T>, assignment: Assignment<T>): boolean {
     let queue = new Queue<[Key<T>, Key<T>]>();
     let doms = cloneDeep(csp.domains);
     let ok = ac3(csp, queue, doms, assignment);
     if (!ok) {
-        return undefined;
+        return false;
     }
     else
         return backtracking_helper(csp, assignment, doms);
