@@ -58,6 +58,17 @@ describe('Csp class', () => {
         assignment.set([[2, 2], 1])
         expect(csp.checkPartial(assignment)).toBe(false);
 
+        let sol = new HashAssign<[Position, Digit]>();
+        backtracking(csp, sol);
+        expect(csp.isComplete(sol)).toEqual(true);
+        expect(csp.checkPartial(sol)).toEqual(true);
+
+        // impossible
+        sol.delete([1, 1]);
+        sol.delete([1, 2]);
+        csp.domains.set([1, 2], [1]);
+        csp.domains.set([1, 1], [1]);
+        expect(backtracking(csp, sol)).toBe(false);
     });
 
     test('Graph coloring', () => {
@@ -97,10 +108,9 @@ describe('Csp class', () => {
         expect(csp.isComplete(assignment)).toBe(true);
         expect(csp.checkPartial(assignment)).toBe(true);
 
-        let assign = new HashAssign<[Region, Color]>();
-        backtracking(csp, assign);
-        expect(csp.isComplete(assign)).toEqual(true);
-        expect(csp.checkPartial(assign)).toEqual(true);
-
+        let sol = new HashAssign<[Region, Color]>();
+        backtracking(csp, sol);
+        expect(csp.isComplete(sol)).toEqual(true);
+        expect(csp.checkPartial(sol)).toEqual(true);
     })
 })
