@@ -1,7 +1,7 @@
 import {Queue} from 'queue-typescript';
 import {Csp, Domains} from './csp';
 import {Key, Value} from './utils';
-import {Assignment} from './assignment';
+import {Assignment} from './Assignment';
 import {cloneDeep} from 'lodash';
 
 function extractArcs<T extends [any, any]>(csp: Csp<T>): Queue<[Key<T>, Key<T>]> {

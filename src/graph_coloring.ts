@@ -1,4 +1,4 @@
-import {Assignment} from './assignment'
+import {Assignment} from './Assignment'
 
 export const colors = ["R", "G", "B"] as const;
 export type Color = typeof colors[number];

@@ -1,5 +1,5 @@
 import {beforeEach, describe, expect, test} from '@jest/globals';
-import {Constraints} from './constraints';
+import {Constraints} from './Constraints';
 import {colors, regions, AusterliaAssign, Color, Region} from './graph_coloring'
 
 describe('Graph coloring constraints', () => {

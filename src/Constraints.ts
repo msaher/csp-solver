@@ -1,4 +1,4 @@
-import {Assignment} from './assignment';
+import {Assignment} from './Assignment';
 import {Graph} from './graph';
 import {wrap} from './utils'
 import {isEqual} from 'lodash';

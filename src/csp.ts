@@ -1,5 +1,5 @@
-import {Assignment} from './assignment';
-import {Constraints} from './constraints';
+import {Assignment} from './Assignment';
+import {Constraints} from './Constraints';
 import {Key, Value} from './utils';
 import {HashMap} from './HashMap';
 

@@ -1,4 +1,4 @@
-import {Assignment} from './assignment'
+import {Assignment} from './Assignment'
 
 export const digits = [1,2,3,4,5,6,7,8,9] as const;
 export type Digit = typeof digits[number];

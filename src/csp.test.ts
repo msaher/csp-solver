@@ -1,7 +1,7 @@
 import {beforeEach, describe, expect, test} from '@jest/globals';
 import {Csp} from './csp';
-import {Constraints} from './constraints';
-import {Assignment} from './assignment';
+import {Constraints} from './Constraints';
+import {Assignment} from './Assignment';
 import {HashMap} from './HashMap';
 import {backtracking} from './backtracking';
 
