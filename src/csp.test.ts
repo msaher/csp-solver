@@ -2,52 +2,44 @@ import {beforeEach, describe, expect, test} from '@jest/globals';
 import {Csp} from './csp';
 import {Constraints} from './constraints';
 import {HashAssign} from './assignment';
+import {HashMap} from './HashMap';
 
 describe('Csp class', () => {
 
     test('sudoku', () => {
-        const values = [1,2,3,4,5,6,7,8,9] as const;
-        type Digit = typeof values[number];
+        type Digit = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 8 | 9;
+        const domain: Digit[] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         type Position = [Digit, Digit];
 
-        let keys = [];
+        let map = new HashMap<Position, Digit[]>();
         for (let i = 1; i <= 9; i++)
             for (let j = 1; j <= 9; j++)
-                keys.push([i, j]);
+                map.set([i, j] as Position, domain);
 
-        let constraints = new Constraints<Position, Digit>();
         let isdiff = (d1: Digit, d2: Digit) => d1 !== d2;
-
-        for (let pos of keys as Position[]) {
+        let constraints = new Constraints<Position, Digit>();
+        for (const [pos, _] of map.entries()) {
             // row constraints
-            for (let i = 1; i <= 9; i++) {
-                if (i != pos[1]) {
+            for (let i = 1; i <= 9; i++)
+                if (i != pos[1])
                     constraints.add([pos[0], i as Digit], pos, isdiff, true);
-                }
-            }
 
             // column constraints
-            for (let i = 1; i <= 9; i++) {
-                if (i != pos[0]) {
+            for (let i = 1; i <= 9; i++)
+                if (i != pos[0])
                     constraints.add([i as Digit, pos[1]], pos, isdiff, true);
-                }
-            }
 
             // square constraints
             let sqRow = Math.floor((pos[0] - 1) / 3) * 3 + 1
             let sqCol = Math.floor((pos[1] - 1) / 3) * 3 + 1
-            for (let i = sqRow; i < sqRow + 3; i++) {
-                for (let j = sqCol; j < sqCol + 3; j++) {
+            for (let i = sqRow; i < sqRow + 3; i++)
+                for (let j = sqCol; j < sqCol + 3; j++)
                     if (i != pos[0] && j != pos[1])
                         constraints.add(pos, [i, j] as Position, isdiff, true);
-                }
-            }
+
         }
 
-        let variables = [...keys] as Position[];
-        let domains = [...values] as Digit[];
-        let csp = new Csp<[Position, Digit]>(variables, domains, constraints);
-
+        let csp = new Csp<[Position, Digit]>(map, constraints);
         let assignment = new HashAssign<[Position, Digit]>();
 
         assignment.set([[1, 1], 1]);
@@ -68,11 +60,15 @@ describe('Csp class', () => {
     });
 
     test('Graph coloring', () => {
-        const colors = ['R', 'G', 'B'] as const;
-        type Color = typeof colors[number];
+        type Color = 'R' | 'G' | 'B';
+        const colors: Color[] = ['R', 'G', 'B'];
 
-        const regions = ["WA", "NT", "SA", "Q", "NSW", "V", "T"] as const;
-        type Region = typeof regions[number];
+        type Region = "WA" | "NT" | "SA" | "Q" | "NSW" | "V" | "T";
+        const regions: Region[] = ["WA", "NT", "SA", "Q", "NSW", "V", "T"];
+
+        let map = new HashMap<Region, Color[]>;
+        for (let reg of regions)
+            map.set(reg, colors);
 
         let isdiff = (c1: Color, c2: Color) => c1 !== c2;
         let cons = new Constraints<Region, Color>;
@@ -87,7 +83,7 @@ describe('Csp class', () => {
         cons.add('Q', 'NSW', isdiff);
         cons.add('NSW', 'V', isdiff);
 
-        let csp = new Csp<[Region, Color]>([...regions] as Region[], [...colors] as Color[], cons);
+        let csp = new Csp<[Region, Color]>(map, cons);
 
         let assignment = new HashAssign<[Region, Color]>();
         assignment.set(['WA', 'R']);

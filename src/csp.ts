@@ -1,16 +1,14 @@
-import { Queue } from 'queue-typescript';
 import {Assignment} from './assignment';
 import {Constraints} from './constraints';
 import {Key, Value} from './utils';
+import {HashMap} from './HashMap';
 
 export class Csp<T extends [any, any]> {
-    keys: Key<T>[];
-    values: Value<T>[];
+    domains: HashMap<Key<T>, Value<T>[]>;
     constraints: Constraints<Key<T>, Value<T>>;
 
-    constructor(keys: Key<T>[], values: Value<T>[], constraints: Constraints<Key<T>, Value<T>>) {
-        this.keys = keys;
-        this.values = values;
+    constructor(domains: HashMap<Key<T>, Value<T>[]>, constraints: Constraints<Key<T>, Value<T>>) {
+        this.domains = domains;
         this.constraints = constraints;
     }
 
@@ -23,6 +21,10 @@ export class Csp<T extends [any, any]> {
     }
 
     isComplete(assignment: Assignment<T>): boolean {
-        return assignment.size() === this.keys.length;
+        return assignment.size() === this.domains.size();
+    }
+
+    getDomain(key: Key<T>): readonly Value<T>[] | undefined {
+        return this.domains.get(key);
     }
 }
