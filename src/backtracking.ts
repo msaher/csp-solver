@@ -124,6 +124,7 @@ function backtracking_helper<T extends [any, any]>(csp: Csp<T>, assignment: Assi
 
 export function backtracking<T extends [any, any]>(csp: Csp<T>, assignment: Assignment<T>): boolean {
     let queue = new Queue<[Key<T>, Key<T>]>();
+    let queue = extractArcs(csp);
     let doms = cloneDeep(csp.domains);
     let ok = ac3(csp, queue, doms, assignment);
     if (!ok) {
