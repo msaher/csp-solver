@@ -1,8 +1,9 @@
 import {beforeEach, describe, expect, test} from '@jest/globals';
 import {Csp} from './csp';
 import {Constraints} from './constraints';
-import {HashAssign} from './assignment';
+import {HashAssign, Assignment} from './assignment';
 import {HashMap} from './HashMap';
+import {backtracking} from './backtracking';
 
 describe('Csp class', () => {
 
@@ -14,7 +15,7 @@ describe('Csp class', () => {
         let map = new HashMap<Position, Digit[]>();
         for (let i = 1; i <= 9; i++)
             for (let j = 1; j <= 9; j++)
-                map.set([i, j] as Position, domain);
+                map.set([i, j] as Position, [... domain]);
 
         let isdiff = (d1: Digit, d2: Digit) => d1 !== d2;
         let constraints = new Constraints<Position, Digit>();
@@ -68,7 +69,7 @@ describe('Csp class', () => {
 
         let map = new HashMap<Region, Color[]>;
         for (let reg of regions)
-            map.set(reg, colors);
+            map.set(reg, [... colors]);
 
         let isdiff = (c1: Color, c2: Color) => c1 !== c2;
         let cons = new Constraints<Region, Color>;
@@ -95,5 +96,12 @@ describe('Csp class', () => {
         assignment.set(['T', 'R']);
         expect(csp.isComplete(assignment)).toBe(true);
         expect(csp.checkPartial(assignment)).toBe(true);
+
+        let assign = new HashAssign<[Region, Color]>();
+        let sol = backtracking(csp, assign) as Assignment<[Region, Color]>;
+        console.log(sol);
+        expect(csp.isComplete(sol)).toEqual(true);
+        expect(csp.checkPartial(sol)).toEqual(true);
+
     })
 })
