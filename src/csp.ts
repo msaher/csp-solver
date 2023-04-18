@@ -29,4 +29,8 @@ export class Csp<T extends [any, any]> {
     getDomain(key: Key<T>): readonly Value<T>[] | undefined {
         return this.domains.get(key);
     }
+
+    entries() {
+        return this.domains.entries();
+    }
 }
