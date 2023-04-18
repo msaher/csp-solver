@@ -4,8 +4,6 @@ import {Key, Value} from './utils';
 import {Assignment, HashAssign} from './assignment';
 import {cloneDeep, constant} from 'lodash';
 
-require("util").inspect.defaultOptions.depth = null;
-
 function extractArcs<T extends [any, any]>(csp: Csp<T>): Queue<[Key<T>, Key<T>]> {
     let q: Queue<[Key<T>, Key<T>]> = new Queue();
     for (const [var1, _] of csp.entries()) {
@@ -42,7 +40,6 @@ function revise<T extends [any, any]>(csp: Csp<T>, var1: Key<T>, var2: Key<T>, d
     let cpd1 = [... d1];
     for (const x of cpd1) {
         if (!hasMatch(csp, var1, x, var2, d2)) {
-            console.log('removing ' + x + ' from ' + var1);
             revised = true;
             const index = d1.indexOf(x);
             d1.splice(index, 1);
@@ -71,7 +68,6 @@ function ac3<T extends [any, any]>(csp: Csp<T>, queue: Queue<[Key<T>, Key<T>]>, 
         if (isrev) {
             let d = domains.get(var1);
             if (d === undefined || d.length === 0) {
-                console.log('THE DOMAIN OF ' + var1 + ' IS 0')
                 return false
             }
             for (const arc of extractArcsToVar(csp, var1, assignment))
@@ -94,63 +90,43 @@ function mrv<T extends [any, any]>(csp: Csp<T>, domains: Domains<T>, assignment:
 
 function backtracking_helper<T extends [any, any]>(csp: Csp<T>, assignment: Assignment<T>, domains: Domains<T>): Assignment<T> | undefined {
     if (csp.isComplete(assignment)) {
-        console.log('YES COMPLETE')
         return assignment;
     }
 
     let cpdom: Domains<T> = cloneDeep(domains);
     let key = mrv(csp, domains, assignment);
-    console.log('TRYING OUT ' + key)
     let d = domains.get(key);
     if (d === undefined) {
-        console.log('NO DOMAIN???')
         return undefined
     }
 
     for (const val of d) {
-        console.log('\t Setting to ' + val);
         assignment.set([key, val] as T);
         if (!csp.checkPartial(assignment)) {
-            console.log('\t ' + val + ' is NOT CONSISTENT')
             assignment.delete(key);
             continue;
         }
 
         cpdom.set(key, [val]);
-        console.log(cpdom)
-        console.log('DOMAIN NOW IS ', cpdom)
         let queue = extractArcsToVar(csp, key, assignment);
         let ok = ac3(csp, queue, cpdom, assignment);
-        console.log('REDUCED DOMAINS')
-        console.log(cpdom)
         if (ok) {
-            console.log('Caling child')
             let result = backtracking_helper(csp, assignment, cpdom);
             if (result !== undefined) {
                 return result;
-            } else {
-                console.log('CHILD FAILED')
             }
-        } else {
-            console.log('NOT OKAY')
         }
         assignment.delete(key);
         cpdom = cloneDeep(domains);
-        // console.log('DOMAIN BACK TO');
-        // console.log(cpdom);
     }
-    console.log('FAILED TO FIND SOLUTION')
     return undefined;
 }
 
 export function backtracking<T extends [any, any]>(csp: Csp<T>, assignment: Assignment<T>): Assignment<T> | undefined {
     let queue = new Queue<[Key<T>, Key<T>]>();
     let doms = cloneDeep(csp.domains);
-    console.log('STARTING')
-    console.log(doms);
     let ok = ac3(csp, queue, doms, assignment);
     if (!ok) {
-        console.log('NOT OK')
         return undefined;
     }
     else

@@ -99,7 +99,6 @@ describe('Csp class', () => {
 
         let assign = new HashAssign<[Region, Color]>();
         let sol = backtracking(csp, assign) as Assignment<[Region, Color]>;
-        console.log(sol);
         expect(csp.isComplete(sol)).toEqual(true);
         expect(csp.checkPartial(sol)).toEqual(true);
 
